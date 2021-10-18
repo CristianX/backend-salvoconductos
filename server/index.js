@@ -2,7 +2,7 @@ const express = require('express');
 const requestId = require('express-request-id')();
 
 const logger = require('./config/logger');
-const api = require('./api');
+const api = require('./api/v1');
 
 // Init app
 const app = express();

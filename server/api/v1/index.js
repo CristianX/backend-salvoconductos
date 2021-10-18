@@ -1,9 +1,6 @@
 const router = require('express').Router();
+const tasks = require('./tasks/routes');
 
-router.route('/usuarios').get((req, res, next) => {
-    res.json({
-        message: 'GET todos los usuarios',
-    });
-});
+router.use('/tasks', tasks);
 
 module.exports = router;
