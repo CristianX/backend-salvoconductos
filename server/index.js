@@ -1,14 +1,14 @@
 const express = require('express');
-const morgan = require('morgan');
+const requestId = require('express-request-id')();
 
 const logger = require('./config/logger');
 
+// Init app
 const app = express();
 
 // Setup middleware
-app.use(
-    morgan('combined', { stream: { write: (message) => logger.info(message) } })
-);
+app.use(requestId);
+app.use(logger.requests);
 
 app.get('/', (req, res, next) => {
     res.json({
