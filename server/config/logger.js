@@ -25,4 +25,10 @@ const requests = morgan(requestFormat, {
 // Attach to logger onject
 logger.requests = requests;
 
+// Format as request logger and attach to logger object
+logger.header = (req) => {
+    const date = new Date().toISOString();
+    return `${req.ip} ${req.ip} [${date}] ${req.id} "${req.method} ${req.orignalUrl}"`;
+};
+
 module.exports = logger;
