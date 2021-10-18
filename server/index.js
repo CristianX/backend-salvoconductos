@@ -12,7 +12,8 @@ app.use(requestId);
 app.use(logger.requests);
 
 // Setup router and routes
-app.use('/api', api);
+app.use('/api', api); //Version final del API
+app.use('/api/v1', api);
 
 app.get('/', (req, res, next) => {
     res.json({
