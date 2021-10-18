@@ -1,18 +1,24 @@
 const express = require('express');
+const morgan = require('morgan');
 
 const logger = require('./config/logger');
 
 const app = express();
 
+// Setup middleware
+app.use(
+    morgan('combined', { stream: { write: (message) => logger.info(message) } })
+);
+
 app.get('/', (req, res, next) => {
     res.json({
-        message: 'Welcome to the API',
+        message: 'Bienvenido al API de salvoconductos',
     });
 });
 
 // No route found handler
 app.use((req, res, next) => {
-    const message = 'Route not found';
+    const message = 'Ruta no encontrada';
     const statusCde = 404;
     logger.warn(message);
 
