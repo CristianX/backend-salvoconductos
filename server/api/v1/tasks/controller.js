@@ -1,5 +1,26 @@
 const Model = require('./model');
 
+exports.id = async(req, res, next, id) => {
+    try {
+        const doc = await Model.findById(id).exec();
+        if (!doc) {
+            const message = `${Model.modelName} no encontrado`;
+
+            next({
+                message,
+                statusCode: 404,
+                level: 'warn',
+            });
+        } else {
+            req.doc = doc;
+            // next para ejecutar el siguiente middleware
+            next();
+        }
+    } catch (err) {
+        next(new Error(err));
+    }
+};
+
 exports.create = async(req, res, next) => {
     const { body = {} } = req;
     const document = new Model(body);
@@ -22,27 +43,34 @@ exports.all = async(req, res, next) => {
     }
 };
 
-exports.read = (req, res, next) => {
-    const { params = {} } = req;
-    const { id } = params;
-    res.json({
-        id,
-    });
+exports.read = async(req, res, next) => {
+    const { doc = {} } = req;
+
+    res.json(doc);
 };
 
-exports.update = (req, res, next) => {
-    const { body = {}, params = {} } = req;
-    const { id } = params;
-    res.json({
-        id,
-        body,
-    });
+exports.update = async(req, res, next) => {
+    const { doc = {}, body = {} } = req;
+
+    // Mezcla el conetido del primer objeto con el contenido del segundo
+    // para casos màs avanzados como propiedades a mayor profundidad se recomienda usar la funciòn merge de la librerìa lodash
+    Object.assign(doc, body);
+
+    try {
+        const updated = await doc.save();
+        res.json(updated);
+    } catch (err) {
+        next(new Error(err));
+    }
 };
 
-exports.delete = (req, res, next) => {
-    const { params = {} } = req;
-    const { id } = params;
-    res.json({
-        id,
-    });
+exports.delete = async(req, res, next) => {
+    const { doc = {} } = req;
+
+    try {
+        const removed = await doc.remove();
+        res.json(removed);
+    } catch (err) {
+        next(new Error(err));
+    }
 };
