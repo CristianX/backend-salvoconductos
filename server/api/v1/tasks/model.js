@@ -30,7 +30,7 @@ const fields = {
     },
 };
 
-const task = new Schema({
+const task = new Schema(fields, {
     timestamps: true,
 });
 
