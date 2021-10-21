@@ -4,27 +4,18 @@ const { Schema } = mongoose;
 
 const fields = {
     title: {
-        typw: String,
+        type: String,
         required: true,
         trim: true,
         maxlength: 128,
     },
 };
 
-const references = {
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true,
-    },
-};
-
-const group = new Schema(Object.assign(fields, references), {
+const group = new Schema(fields, {
     timestamps: true,
 });
 
 module.exports = {
     Model: mongoose.model('group', group),
     fields,
-    references,
 };
